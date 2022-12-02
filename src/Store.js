@@ -1,10 +1,9 @@
 export default class Store {
-  state = {};
   subscirbes = new Array();
 
   constructor( reducer ) {
     this.reducer = reducer;
-    this.state = this.reducer();
+    this.state = this.reducer({type:null});
   }
 
   getState() {
@@ -12,8 +11,10 @@ export default class Store {
   }
 
   dispatch(action) {
-    this.state = this.reducer( this.state, action );
-    this.subscirbes.forEach(func => { func( this.state ) });
+    this.state = this.reducer( action, this.state );
+    this.subscirbes.forEach(func => {
+      func( this.state );
+    });
   }
 
   subscribe(func) {
